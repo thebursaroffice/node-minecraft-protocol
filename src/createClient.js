@@ -34,7 +34,9 @@ function createClient (options) {
   const hideErrors = options.hideErrors || false
   const Client = options.Client || DefaultClientImpl
 
-  const client = new Client(false, version.minecraftVersion, options.customPackets, hideErrors)
+  // Preserve original version string if it's 1.21.11 (minecraft-data normalizes it to 1.21)
+  const versionString = (optVersion === '1.21.11') ? '1.21.11' : version.minecraftVersion
+  const client = new Client(false, versionString, options.customPackets, hideErrors)
 
   tcpDns(client, options)
   if (options.auth instanceof Function) {
