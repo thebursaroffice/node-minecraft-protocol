@@ -30,7 +30,15 @@ function createClient (options) {
   if (!mcData) throw new Error(`unsupported protocol version: ${optVersion}`)
   const version = mcData.version
   options.majorVersion = version.majorVersion
-  options.protocolVersion = version.version
+  let protocolVersion = version.version
+  if (optVersion === '1.21.11') {
+    const minecraftData = require('minecraft-data')
+    const versionInfo = minecraftData.versionsByMinecraftVersion.pc['1.21.11']
+    if (versionInfo) {
+      protocolVersion = versionInfo.version // 774
+    }
+  }
+  options.protocolVersion = protocolVersion
   const hideErrors = options.hideErrors || false
   const Client = options.Client || DefaultClientImpl
 
